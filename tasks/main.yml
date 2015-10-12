@@ -1,0 +1,37 @@
+
+- name: Install the nginx package
+  apt: name=nginx state=present update_cache=yes
+
+- name: Make sure the sites-available, sites-enabled and conf.d directories exist
+  file: path=/etc/nginx/{{ item }} state=directory owner=root group=root mode=0755
+  with_items:
+    - "sites-available"
+    - "sites-enabled"
+    - "conf.d"
+
+- name: Make sure the nginx configuration is updated
+  template: src=nginx.conf.j2 dest=/etc/nginx/nginx.conf owner=root group=root mode=0644
+  notify:
+   - restart nginx
+
+- name: Make sure the nginx upstreams are updated
+  template: src=upstreams.conf.j2 dest=/etc/nginx/upstreams.conf owner=root group=root mode=0644
+  notify:
+   - reload nginx
+
+- name: Set up the nginx default site configuration file
+  template: src=default.j2 dest=/etc/nginx/sites-available/default
+
+- name: Enable the nginx default site
+  file: path=/etc/nginx/sites-enabled/default state=link src=/etc/nginx/sites-available/default
+  when: nginx_default_site_enabled
+
+- name: Update the configurations for sites
+  template: src=site.j2 dest=/etc/nginx/sites-available/{{ item['server']['name'] }}
+  with_items: nginx_sites
+
+- name: Enable sites
+  file: path=/etc/nginx/sites-enabled/{{ item['server']['name'] }} state=link src=/etc/nginx/sites-available/{{ item['server']['name'] }}
+  with_items: nginx_sites
+  notify:
+   - reload nginx

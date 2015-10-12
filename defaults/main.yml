@@ -1,0 +1,40 @@
+
+nginx_user: www-data
+nginx_worker_processes: 4
+nginx_worker_connections: 768
+nginx_pid_filename: /run/nginx.pid
+
+nginx_http_params:
+  sendfile: on
+  tcp_nopush: on
+  tcp_nodelay: on
+  keepalive_timeout: 65
+  gzip: on
+  gzip_disable: "msie6"
+
+nginx_log_dirname: /var/log/nginx
+nginx_access_log_filename: access.log
+nginx_error_log_filename: error.log
+
+nginx_separate_logs_per_site: no
+nginx_default_site_enabled: yes
+nginx_default_site_root: /usr/share/nginx/html
+
+nginx_sites: []
+# - server:
+#    file_name: foo
+#    listen: 8080
+#    server_name: localhost
+#    root: "/tmp/site1"
+#    location1: {name: /, try_files: "$uri $uri/ /index.html"}
+#    location2: {name: /images/, try_files: "$uri $uri/ /index.html"}
+# - server:
+#    file_name: bar
+#    listen: 9090
+#    server_name: ansible
+#    root: "/tmp/site2"
+#    location1: {name: /, try_files: "$uri $uri/ /index.html"}
+#    location2: {name: /images/, try_files: "$uri $uri/ /index.html"}
+
+nginx_proxy_next_upstream:
+nginx_upstreams: []

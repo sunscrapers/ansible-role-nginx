@@ -1,0 +1,11 @@
+server {
+  listen 80 default_server;
+  server_name localhost;
+
+  root   {{ nginx_default_site_root }};
+  index  index.html index.htm;
+
+  location / {
+		try_files $uri $uri/ =404;
+	}
+}

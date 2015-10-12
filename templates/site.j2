@@ -1,0 +1,20 @@
+server {
+{% if nginx_separate_logs_per_site %}
+	access_log {{ nginx_log_dirname }}/{{ item.server.name }}-{{ nginx_access_log_filename }};
+	error_log {{ nginx_log_dirname }}/{{ item.server.name }}-{{ nginx_error_log_filename }};
+{% endif %}
+
+{% for k,v in item.server.iteritems() %}
+{% if k.find('location') == -1 and k != 'name' %}
+{{ k }} {{ v }};
+{% endif %}
+{% endfor %}
+
+{% for k,v in item.server.iteritems() if k.find('location') != -1 %}
+  location {{ v.name }} {
+{% for x,y in v.iteritems() if x != 'name' %}
+      {{ x }} {{ y }};
+{% endfor %}
+  }
+{% endfor %}
+}

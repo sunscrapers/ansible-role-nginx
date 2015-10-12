@@ -1,0 +1,26 @@
+user {{ nginx_user }};
+worker_processes {{ nginx_worker_processes }};
+pid {{ nginx_pid_filename }};
+
+events {
+  worker_connections {{ nginx_worker_connections }};
+}
+
+http {
+	include /etc/nginx/mime.types;
+	default_type application/octet-stream;
+
+  access_log {{ nginx_log_dirname }}/{{ nginx_access_log_filename }};
+  error_log {{ nginx_log_dirname }}/{{ nginx_error_log_filename }};
+
+	gzip on;
+	gzip_disable "msie6";
+
+{% for k,v in nginx_http_params.iteritems() %}
+  {{ k }} {{ v }};
+{% endfor %}
+
+	include /etc/nginx/conf.d/*.conf;
+  include /etc/nginx/conf.d/upstreams.conf;
+	include /etc/nginx/sites-enabled/*;
+}

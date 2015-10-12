@@ -1,0 +1,11 @@
+{% if nginx_proxy_next_upstream %}
+proxy_next_upstream {{ nginx_proxy_next_upstream }};
+{% endif %}
+
+{% for upstream in nginx_upstreams %}
+upstream {{ upstream.name }} {
+  {% for directive in upstream.directives %}
+  {{ directive }};
+  {% endfor %}
+}
+{% endfor %}

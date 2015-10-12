@@ -1,0 +1,14 @@
+galaxy_info:
+  author: Przemek Lewandowski
+  company: SUNSCRAPERS
+  description: This role installs and configures nginx.
+  min_ansible_version: 1.9
+  license: MIT
+  platforms:
+  - name: Ubuntu
+    versions:
+    - Trusty
+  categories:
+  - system
+
+dependencies: []
