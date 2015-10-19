@@ -5,11 +5,11 @@ nginx_worker_connections: 768
 nginx_pid_filename: /run/nginx.pid
 
 nginx_http_params:
-  sendfile: on
-  tcp_nopush: on
-  tcp_nodelay: on
+  sendfile: "on"
+  tcp_nopush: "on"
+  tcp_nodelay: "on"
   keepalive_timeout: 65
-  gzip: on
+  gzip: "on"
   gzip_disable: "msie6"
 
 nginx_log_dirname: /var/log/nginx
