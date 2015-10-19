@@ -38,3 +38,5 @@ nginx_sites: []
 
 nginx_proxy_next_upstream:
 nginx_upstreams: []
+#- {name: "foo", directives: ["server unix:///tmp/foo.socket"]}
+#- {name: "bar", directives: ["server unix:///tmp/bar.socket"]}
