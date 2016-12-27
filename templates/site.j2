@@ -1,3 +1,4 @@
+{% if 'server' in item %}
 server {
 {% if nginx_separate_logs_per_site %}
     access_log {{ nginx_log_dirname }}/{{ item.server.name }}-{{ nginx_access_log_filename }};
@@ -5,16 +6,27 @@ server {
 {% endif %}
 
 {% for k,v in item.server.iteritems() %}
-{% if k.find('location') == -1 and k != 'file_name' %}
-{{ k }} {{ v }};
+{% if k.find('location') == -1 %}
+    {{ k }} {{ v }};
 {% endif %}
 {% endfor %}
 
 {% for k,v in item.server.iteritems() if k.find('location') != -1 %}
     location {{ v.name }} {
-    {% for x,y in v.iteritems() if x != 'name' %}
+{% for x,y in v.iteritems() if x != 'name' %}
         {{ x }} {{ y }};
-    {% endfor %}
+{% endfor %}
     }
 {% endfor %}
 }
+{% endif %}
+
+{% if 'upstreams' in item %}
+{% for upstream in item.upstreams %}
+upstream {{ upstream.name }} {
+{% for directive in upstream.directives %}
+    {{ directive }};
+{% endfor %}
+}
+{% endfor %}
+{% endif %}

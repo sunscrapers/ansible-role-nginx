@@ -1,0 +1,22 @@
+- hosts: all
+  gather_facts: no
+  vars_files:
+    - defaults/main.yml
+  tasks:
+    - raw: sudo apt-get -y install python
+    - setup:
+    - file: path=/tmp/site1 state=directory
+    - include: tasks/main.yml
+      vars:
+        nginx_sites:
+          - server:
+              listen: 8080
+              server_name: localhost
+              root: /tmp/site1
+              location1: {name: /, try_files: "$uri $uri/ /index.html"}
+              location2: {name: /images/, try_files: "$uri $uri/ /index.html"}
+            file_name: foo
+            upstreams:
+              - {name: "foo2", directives: ["server unix:///tmp/foo.socket"]}
+  handlers:
+    - include: handlers/main.yml
