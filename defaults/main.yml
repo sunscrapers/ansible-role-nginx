@@ -19,6 +19,7 @@ nginx_error_log_filename: error.log
 nginx_separate_logs_per_site: no
 nginx_default_site_enabled: yes
 nginx_default_site_root: /usr/share/nginx/html
+nginx_include_certbot_verification: false
 
 nginx_sites: []
 # - server:

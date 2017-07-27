@@ -8,4 +8,10 @@ server {
   location / {
 		try_files $uri $uri/ =404;
 	}
+
+{% if nginx_include_certbot_verification %}
+  location ~ /.well-known {
+        allow all;
+  }
+{% endif %}
 }
