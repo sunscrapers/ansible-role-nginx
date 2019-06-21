@@ -4,13 +4,14 @@ server {
     access_log {{ nginx_log_dirname }}/{{ item.server.name }}-{{ nginx_access_log_filename }};
     error_log {{ nginx_log_dirname }}/{{ item.server.name }}-{{ nginx_error_log_filename }};
 {% endif %}
-
 {% for k,v in item.server.iteritems() %}
-{% if k.find('location') == -1 %}
+{% if ((k.find('location') == -1) and (k.find('set_real_ip_from') == -1)) %}
     {{ k }} {{ v }};
 {% endif %}
 {% endfor %}
-
+{% for k,v in item.server.iteritems() if k.find('set_real_ip_from') != -1 %}
+    set_real_ip_from {{ v }};
+{% endfor %}
 {% for k,v in item.server.iteritems() if k.find('location') != -1 %}
     location {{ v.name }} {
 {% for x,y in v.iteritems() if x != 'name' %}
